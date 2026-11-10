@@ -1,0 +1,885 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TenshiHub Key System</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --red: #ff1717;
+    --red2: #ff4545;
+    --dark: #050505;
+    --panel: rgba(17, 10, 10, .92);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: var(--dark);
+    color: white;
+    font-family: 'Inter', sans-serif;
+}
+
+/* BACKGROUND */
+
+.background {
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    background:
+        radial-gradient(ellipse at 50% 40%,
+        rgba(130,0,0,.25), transparent 55%),
+        radial-gradient(ellipse at 10% 90%,
+        rgba(255,0,0,.12), transparent 45%),
+        #050505;
+}
+
+.background::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: .2;
+    background-image:
+        linear-gradient(rgba(255,0,0,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,0,0,.08) 1px, transparent 1px);
+    background-size: 55px 55px;
+    animation: gridMove 15s linear infinite;
+    mask-image: linear-gradient(transparent, black, transparent);
+}
+
+@keyframes gridMove {
+    to { background-position: 55px 55px; }
+}
+
+.orb {
+    position: fixed;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    filter: blur(120px);
+    background: #b00000;
+    opacity: .15;
+    z-index: -2;
+    animation: orbMove 9s infinite alternate ease-in-out;
+}
+
+.orb.one {
+    top: -150px;
+    left: -100px;
+}
+
+.orb.two {
+    right: -150px;
+    bottom: -150px;
+    animation-delay: -4s;
+}
+
+@keyframes orbMove {
+    to {
+        transform: translate(100px, 100px) scale(1.4);
+        opacity: .3;
+    }
+}
+
+/* PARTICLES */
+
+#particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: #ff2929;
+    border-radius: 50%;
+    box-shadow: 0 0 12px #ff0000;
+    animation: particleMove linear infinite;
+}
+
+@keyframes particleMove {
+    0% {
+        transform: translateY(105vh) scale(.3);
+        opacity: 0;
+    }
+    15%, 85% { opacity: 1; }
+    100% {
+        transform: translateY(-10vh) scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* HEADER */
+
+header {
+    width: 100%;
+    padding: 25px 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 10;
+}
+
+.brand {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 21px;
+    letter-spacing: 2px;
+    color: white;
+    text-shadow: 0 0 18px red;
+}
+
+.brand span {
+    color: var(--red);
+}
+
+.nav {
+    display: flex;
+    gap: 8px;
+    padding: 7px;
+    border: 1px solid rgba(255,0,0,.3);
+    border-radius: 12px;
+    background: rgba(10,5,5,.8);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 0 25px rgba(255,0,0,.08);
+}
+
+.nav button {
+    border: none;
+    padding: 12px 17px;
+    border-radius: 8px;
+    background: transparent;
+    color: #aaa;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.nav button:hover,
+.nav button.active {
+    color: white;
+    background: linear-gradient(120deg,#a90000,#ff2525);
+    box-shadow: 0 0 18px rgba(255,0,0,.45);
+    transform: translateY(-2px);
+}
+
+.status {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #ff5151;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.status i {
+    width: 7px;
+    height: 7px;
+    background: #ff2929;
+    border-radius: 50%;
+    box-shadow: 0 0 12px red;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: .25; }
+}
+
+/* MAIN */
+
+main {
+    width: 100%;
+    min-height: 75vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 55px 20px;
+}
+
+.card {
+    width: 100%;
+    max-width: 530px;
+    padding: 40px 35px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    border: 1px solid rgba(255,40,40,.4);
+    border-radius: 22px;
+    background: var(--panel);
+    backdrop-filter: blur(20px);
+    box-shadow:
+        0 0 40px rgba(255,0,0,.12),
+        inset 0 0 30px rgba(255,0,0,.035);
+    animation: cardEnter 1s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes cardEnter {
+    from {
+        opacity: 0;
+        transform: translateY(35px) scale(.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Animated border */
+
+.card::before {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    background: conic-gradient(
+        transparent,
+        transparent,
+        #ff1010,
+        transparent 35%
+    );
+    animation: rotateBorder 6s linear infinite;
+    z-index: -2;
+}
+
+.card::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 20px;
+    background: #100909;
+    z-index: -1;
+}
+
+@keyframes rotateBorder {
+    to { transform: rotate(360deg); }
+}
+
+/* BRAND LOGO */
+
+.logo {
+    width: 76px;
+    height: 76px;
+    margin: auto auto 23px;
+    display: grid;
+    place-items: center;
+    border: 1px solid #ff3535;
+    border-radius: 20px;
+    background: linear-gradient(145deg,#3a0000,#130000);
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 39px;
+    font-weight: 900;
+    text-shadow: 0 0 20px red;
+    box-shadow:
+        0 0 25px rgba(255,0,0,.35),
+        inset 0 0 20px rgba(255,0,0,.2);
+    animation: logoPulse 3s infinite ease-in-out;
+}
+
+@keyframes logoPulse {
+    50% {
+        transform: translateY(-7px) rotate(5deg);
+        box-shadow: 0 0 45px rgba(255,0,0,.7);
+    }
+}
+
+/* TEXT */
+
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(24px,5vw,34px);
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-shadow: 0 0 20px rgba(255,0,0,.65);
+}
+
+h1 span {
+    color: #ff2525;
+}
+
+.subtitle {
+    margin-top: 12px;
+    color: #a9a0a0;
+    font-size: 11px;
+    letter-spacing: 3px;
+}
+
+.divider {
+    width: 90px;
+    height: 3px;
+    margin: 25px auto;
+    background: linear-gradient(90deg,transparent,red,transparent);
+    box-shadow: 0 0 15px red;
+    animation: dividerPulse 2s infinite;
+}
+
+@keyframes dividerPulse {
+    50% {
+        width: 150px;
+        opacity: .6;
+    }
+}
+
+/* KEY MENU */
+
+.key-section {
+    margin-top: 32px;
+    text-align: left;
+}
+
+.key-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.key-title span {
+    color: #ff4444;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.key-title small {
+    color: #777;
+    font-size: 10px;
+}
+
+.key-container {
+    position: relative;
+    padding: 3px;
+    border-radius: 13px;
+    background: linear-gradient(
+        90deg,#4b0000,#ff1010,#650000,#ff3939
+    );
+    background-size: 300% 300%;
+    animation: keyGradient 4s linear infinite;
+    box-shadow: 0 0 20px rgba(255,0,0,.2);
+}
+
+@keyframes keyGradient {
+    to { background-position: 300% 0; }
+}
+
+.key-inner {
+    min-height: 65px;
+    padding: 15px;
+    border-radius: 11px;
+    background: #0b0707;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+#key {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.6;
+    word-break: break-all;
+    user-select: all;
+}
+
+.copy-icon {
+    flex-shrink: 0;
+    border: 1px solid rgba(255,50,50,.4);
+    background: rgba(255,0,0,.08);
+    color: #ff4545;
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: .3s;
+    font-size: 17px;
+}
+
+.copy-icon:hover {
+    background: #c90000;
+    color: white;
+    box-shadow: 0 0 20px red;
+    transform: rotate(-8deg) scale(1.1);
+}
+
+/* COPY BUTTON */
+
+.copy-btn {
+    width: 100%;
+    padding: 17px;
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #ff5555;
+    border-radius: 11px;
+    background: linear-gradient(100deg,#650000,#ff1717,#8d0000);
+    background-size: 200% 200%;
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: .3s;
+    animation: buttonGlow 3s infinite;
+}
+
+@keyframes buttonGlow {
+    50% {
+        box-shadow: 0 0 28px rgba(255,0,0,.5);
+        background-position: 100% 50%;
+    }
+}
+
+.copy-btn::before {
+    content: "";
+    position: absolute;
+    top: -100%;
+    left: -40%;
+    width: 30%;
+    height: 300%;
+    background: rgba(255,255,255,.25);
+    transform: rotate(25deg);
+    transition: .6s;
+}
+
+.copy-btn:hover::before {
+    left: 120%;
+}
+
+.copy-btn:hover {
+    transform: translateY(-4px) scale(1.015);
+    box-shadow: 0 8px 35px rgba(255,0,0,.4);
+}
+
+.copy-btn:active {
+    transform: scale(.96);
+}
+
+/* NOTIFICATION */
+
+.notification {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 17px;
+    padding: 10px;
+    border: 1px solid rgba(255,0,0,.2);
+    border-radius: 9px;
+    color: #ff7777;
+    background: rgba(255,0,0,.045);
+    font-size: 11px;
+    opacity: .75;
+    transition: .3s;
+}
+
+.notification.success {
+    color: #64ff9a;
+    border-color: rgba(50,255,120,.4);
+    background: rgba(0,255,80,.07);
+    box-shadow: 0 0 18px rgba(0,255,80,.1);
+}
+
+/* INFO */
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 23px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,.08);
+    color: #777;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.info span {
+    color: #ff4444;
+}
+
+/* NAV CONTENT */
+
+.extra {
+    display: none;
+    min-height: 260px;
+    padding-top: 20px;
+    animation: cardEnter .5s ease;
+}
+
+.extra h2 {
+    font-family: 'Orbitron', sans-serif;
+    color: #ff3939;
+    font-size: 20px;
+    margin-bottom: 18px;
+}
+
+.extra p {
+    color: #aaa;
+    font-size: 13px;
+    line-height: 2;
+}
+
+.feature {
+    margin: 10px 0;
+    padding: 13px;
+    border: 1px solid rgba(255,0,0,.2);
+    border-radius: 9px;
+    background: rgba(255,0,0,.04);
+    color: #ddd;
+    font-size: 12px;
+    transition: .3s;
+}
+
+.feature:hover {
+    border-color: red;
+    transform: translateX(5px);
+    box-shadow: 0 0 15px rgba(255,0,0,.15);
+}
+
+.back-btn {
+    margin-top: 20px;
+    padding: 12px 22px;
+    color: white;
+    background: #a00000;
+    border: 1px solid red;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    padding: 25px 10px 35px;
+    color: #777;
+    font-size: 10px;
+    letter-spacing: 3px;
+}
+
+footer strong {
+    color: #ff3333;
+}
+
+@media(max-width:700px) {
+    header {
+        padding: 20px 15px;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .nav {
+        width: 100%;
+        justify-content: center;
+        gap: 2px;
+    }
+
+    .nav button {
+        padding: 11px 10px;
+        font-size: 10px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    main {
+        padding: 30px 15px;
+    }
+
+    .card {
+        padding: 32px 20px;
+    }
+
+    #key {
+        font-size: 11px;
+    }
+}
+
+@media(prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="background"></div>
+<div class="orb one"></div>
+<div class="orb two"></div>
+<div id="particles"></div>
+
+<header>
+    <div class="brand">TENSHI<span>HUB</span></div>
+
+    <nav class="nav">
+        <button class="active" data-page="home">HOME</button>
+        <button data-page="key">KEY</button>
+        <button data-page="features">FEATURES</button>
+        <button data-page="about">ABOUT</button>
+    </nav>
+
+    <div class="status">
+        <i></i> SYSTEM ONLINE
+    </div>
+</header>
+
+<main>
+<section class="card">
+
+    <div class="logo">T</div>
+
+    <h1>TENSHI<span>HUB</span></h1>
+    <p class="subtitle">NEXT GENERATION KEY SYSTEM</p>
+
+    <div class="divider"></div>
+
+    <div id="home" class="page">
+        <div class="key-section">
+            <div class="key-title">
+                <span>✦ YOUR ACCESS KEY</span>
+                <small>OFFICIAL KEY</small>
+            </div>
+
+            <div class="key-container">
+                <div class="key-inner">
+                    <div id="key">
+                        TenshiHubKeyKsosowi - Kalaowjnekeiehi
+                    </div>
+
+                    <button class="copy-icon"
+                        onclick="copyKey()"
+                        aria-label="Copy key">
+                        ▢
+                    </button>
+                </div>
+            </div>
+
+            <button class="copy-btn" onclick="copyKey()">
+                ✦ &nbsp; COPY KEY &nbsp; ✦
+            </button>
+
+            <div class="notification" id="notification">
+                <span>●</span>
+                <span id="message">READY TO COPY YOUR KEY</span>
+            </div>
+        </div>
+
+        <div class="info">
+            <div>STATUS: <span>ACTIVE</span></div>
+            <div>VERSION: <span>V1.0</span></div>
+        </div>
+    </div>
+
+    <div id="keyPage" class="extra page">
+        <h2>KEY ACCESS</h2>
+        <p>Your official TenshiHub access key.</p>
+        <div class="feature">
+            🔑 Secure key display
+        </div>
+        <div class="feature">
+            ⚡ One-click key copying
+        </div>
+        <button class="back-btn" onclick="showPage('home')">
+            BACK TO HOME
+        </button>
+    </div>
+
+    <div id="features" class="extra page">
+        <h2>FEATURES</h2>
+        <div class="feature">✦ Modern interface</div>
+        <div class="feature">✦ Neon animated effects</div>
+        <div class="feature">✦ Fast copy system</div>
+        <div class="feature">✦ Responsive design</div>
+        <div class="feature">✦ Smooth transitions</div>
+    </div>
+
+    <div id="about" class="extra page">
+        <h2>ABOUT TENSHIHUB</h2>
+        <p>
+            Welcome to TenshiHub.
+            <br>
+            A modern interface with a futuristic
+            red and black design.
+            <br><br>
+            POWERED BY TENSHIHUB
+        </p>
+    </div>
+
+</section>
+</main>
+
+<footer>
+    <strong>TENSHIHUB</strong> © 2026
+    <br><br>
+    ALL RIGHTS RESERVED
+</footer>
+
+<script>
+
+// PARTICLE GENERATOR
+
+const particleContainer =
+    document.getElementById("particles");
+
+for (let i = 0; i < 75; i++) {
+    const particle = document.createElement("div");
+
+    particle.className = "particle";
+
+    particle.style.left = Math.random() * 100 + "%";
+    particle.style.animationDuration =
+        (5 + Math.random() * 12) + "s";
+
+    particle.style.animationDelay =
+        (Math.random() * 10) + "s";
+
+    const size = 1 + Math.random() * 3;
+
+    particle.style.width = size + "px";
+    particle.style.height = size + "px";
+
+    particleContainer.appendChild(particle);
+}
+
+// NAVIGATION
+
+const navButtons = document.querySelectorAll(".nav button");
+
+function showPage(page) {
+
+    document.querySelectorAll(".page").forEach(item => {
+        item.style.display = "none";
+    });
+
+    navButtons.forEach(button => {
+        button.classList.remove("active");
+    });
+
+    if (page === "home") {
+        document.getElementById("home").style.display = "block";
+    }
+
+    if (page === "key") {
+        document.getElementById("keyPage").style.display = "block";
+    }
+
+    if (page === "features") {
+        document.getElementById("features").style.display = "block";
+    }
+
+    if (page === "about") {
+        document.getElementById("about").style.display = "block";
+    }
+
+    const active = document.querySelector(
+        `.nav button[data-page="${page}"]`
+    );
+
+    if (active) active.classList.add("active");
+}
+
+navButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        showPage(button.dataset.page);
+    });
+});
+
+// COPY KEY
+
+async function copyKey() {
+
+    const key = document.getElementById("key")
+        .innerText.trim();
+
+    const notification =
+        document.getElementById("notification");
+
+    const message =
+        document.getElementById("message");
+
+    const button =
+        document.querySelector(".copy-btn");
+
+    try {
+        if (navigator.clipboard &&
+            window.isSecureContext) {
+
+            await navigator.clipboard.writeText(key);
+
+        } else {
+            const textarea =
+                document.createElement("textarea");
+
+            textarea.value = key;
+            textarea.style.position = "fixed";
+            textarea.style.opacity = "0";
+
+            document.body.appendChild(textarea);
+            textarea.select();
+
+            const copied =
+                document.execCommand("copy");
+
+            textarea.remove();
+
+            if (!copied) throw new Error("Copy failed");
+        }
+
+        notification.classList.add("success");
+        message.innerText = "KEY COPIED SUCCESSFULLY!";
+
+        button.innerText = "✓ COPIED SUCCESSFULLY";
+
+        button.style.background =
+            "linear-gradient(100deg,#075b20,#13a84a)";
+
+        setTimeout(() => {
+            notification.classList.remove("success");
+
+            message.innerText = "READY TO COPY YOUR KEY";
+
+            button.innerText = "✦ COPY KEY ✦";
+
+            button.style.background = "";
+        }, 2500);
+
+    } catch (error) {
+        message.innerText =
+            "COPY FAILED - PLEASE COPY MANUALLY";
+
+        notification.classList.remove("success");
+    }
+}
+
+</script>
+
+</body>
+</html>
